@@ -2,11 +2,11 @@
 #include "route_time.h"
 #include "route_edge.h"
 
-#define CALENDAR_PATH "../../data/calendar.in"
-#define STOPS_PATH "../../data/stops.in"
-#define STOP_TIMES_PATH "../../data/stop_times.in"
-#define TRANSFERS_PATH "../../data/transfers.in"
-#define TRIPS_PATH "../../data/trips.in"
+#define CALENDAR_PATH "../data/calendar.in"
+#define STOPS_PATH "../data/stops.in"
+#define STOP_TIMES_PATH "../data/stop_times.in"
+#define TRANSFERS_PATH "../data/transfers.in"
+#define TRIPS_PATH "../data/trips.in"
 
 Graph *G = new Graph(5000, 200000);
 

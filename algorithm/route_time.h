@@ -9,9 +9,10 @@
 #define _route_time_h 1
 
 #include <stdio.h>
+#include <time.h>
 
 struct Time {
-	int year, month, day, hour, minute, second;
+	int time_stamp;
 	
 	/// default all 0
 	Time() {
@@ -20,9 +21,7 @@ struct Time {
 	
 	/// structure time use string like "2016-07-27 21:00:00"
 	Time(const char *time_format_string) {
-		sscanf(time_format_string,
-			"%d-%d-%d %d:%d:%d",
-			&year, &month, &day, &hour, &minute, &second);
+		
 	}
 
 	/// copy structure

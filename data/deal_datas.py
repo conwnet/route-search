@@ -30,8 +30,8 @@ for line in lines :
 #read from trips.txt to get the service_id  (trip_id => service_id)
 file_trips.readline()
 lines = file_trips.readlines()
-dic_trip_id = {}
-hash_trip_id = {}
+dic_trip_id = {} # service id
+hash_trip_id = {} # integer trip id
 for line in lines :
     line = line.split(',')
     dic_trip_id[line[2]] = line[1]

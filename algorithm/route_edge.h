@@ -34,12 +34,14 @@ struct Graph {
 	}
 
 	/// create an edge, return the index in edge arrays
-	int create_edge(int to, int service_id, int trip_id,
-		const Time &departure_time, const Time &arrival_time) {
+	int create_edge(int to, int cost, int type, int service_id = 0,
+		int trip_id = 0, const Time &departure_time = "",
+		const Time &arrival_time = "") {
 		edge[edge_count].to = to;
+		edge[edge_count].cost = cost;
+		edge[edge_count].type = type;
 		edge[edge_count].service_id = service_id;
 		edge[edge_count].trip_id = trip_id;
-		edge[edge_count].type = 1;
 		edge[edge_count].departure_time = departure_time;
 		edge[edge_count].arrival_time = arrival_time;
 

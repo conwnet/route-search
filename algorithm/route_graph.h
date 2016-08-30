@@ -45,22 +45,24 @@ struct Graph {
 
 		for(int i = 0; i < max_vertex; i++)
 			stop_name[i] = (char *)malloc(sizeof(char) * 50);
+
+		stop_count = 0;
 		trip_count = 0;
 		transfer_count = 0;
 	}
 
 	/// create a trip, return the index in trip array
 	int create_trip(int from, int to, 
-		const Time &departure_time = "",
-		const Time &arrival_time = "",
+		const char *departure_time, const char *arrival_time,
 		int trip_id = 0, int service_id = 0) {
 	
 		trip[trip_count].from = from;
 		trip[trip_count].to = to;
-		trip[trip_count].service_id = service_id;
-		trip[trip_count].trip_id = trip_id;
 		trip[trip_count].departure_time = departure_time;
 		trip[trip_count].arrival_time = arrival_time;
+		trip[trip_count].to = to;
+		trip[trip_count].service_id = service_id;
+		trip[trip_count].trip_id = trip_id;
 
 		return trip_count++;
 	}

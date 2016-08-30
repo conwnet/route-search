@@ -9,19 +9,38 @@
 #define _route_time_h 1
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <time.h>
 
 struct Time {
-	int time_stamp;
+	time_t timer;
+	int year, month, day, hour, minute, second;
 	
 	/// default all 0
 	Time() {
-		year = month = day = hour = minute = second = 0;
 	}
 	
 	/// structure time use string like "2016-07-27 21:00:00"
 	Time(const char *time_format_string) {
-		
+		year = atoi(time_format_string);
+		month = atoi(time_format_string + 5);
+		day = atoi(time_format_string + 8);
+		hour = atoi(time_format_string + 11);
+		minute = atoi(time_format_string + 14);
+		second = atoi(time_format_string + 17);
+		update();
+	}
+
+	void update() {
+		tm time;
+		time.tm_year = year - 1900;
+		time.tm_mon = month - 1;
+		time.tm_mday = day;
+		time.tm_hour = hour;
+		time.tm_min = minute;
+		time.tm_sec = second;
+		timer = mktime(&time);
 	}
 
 	/// copy structure
@@ -32,6 +51,7 @@ struct Time {
 		hour = time.hour;
 		minute = time.minute;
 		second = time.second;
+		update();
 	}
 
 	/// maximize the time
@@ -42,40 +62,22 @@ struct Time {
 		hour = 23;
 		minute = 59;
 		second = 59;
+		update();
 	}
 
 	/// make the < operator
 	bool operator< (const Time &time) const {
-		if(year != time.year)
-			return year < time.year;
-		if(month != time.month)
-			return month < time.month;
-		if(day != time.day)
-			return day < time.day;
-		if(hour != time.hour)
-			return hour < time.hour;
-		if(minute != time.minute)
-			return minute < time.minute;
-		return second < time.second;
+		return timer < time.timer;
 	}
 
 	/// make the = operator with a format string
 	Time operator= (const char *time_format_string) {
-		int entire_string = 0;
-		for(int i = 0; *(time_format_string + i); i++) {
-			if(*(time_format_string + i) == '-') {
-				entire_string = 1;
-				break;
-			}
-		}
-		if(entire_string) {
-			sscanf(time_format_string,
-				"%d-%d-%d %d:%d:%d",
-				&year, &month, &day, &hour, &minute, &second);
-		
+		if(strchr(time_format_string, '-')) {
+			timer = Time(time_format_string).timer;
 		} else {
-			sscanf(time_format_string,
-				"%d:%d:%d", &hour, &minute, &second);
+			hour = atoi(time_format_string);
+			minute = atoi(time_format_string + 3);
+			second = atoi(time_format_string + 6);
 		}
 	}
 
@@ -94,20 +96,19 @@ struct Time {
 */
 
 	///make the - opeartor
-	int operator- (const Time &time) {
-		int sum1 = hour * 3600 + minute * 60 + second;
-		int sum2 = time.hour * 3600 + time.minute * 60 + time.second;
-		return sum1 - sum2;
+	long operator- (const Time &time) {
+		return timer - time.timer;
 	}
 
 	/// save as a string
 	char *tostr(char *str) {
-		sprintf(str, "%d-%d-%d %d:%d:%d",
+		sprintf(str, "%04d-%02d-%02d %02d:%02d:%02d",
 			year, month, day, hour, minute, second);
+		return str;
 	}
 };
 
-typedef struct Time Time;
+//typedef struct Time Time;
 
 
 #endif

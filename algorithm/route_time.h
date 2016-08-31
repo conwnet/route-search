@@ -19,6 +19,18 @@ struct Time {
 	
 	/// default all 0
 	Time() {
+		year = month = day = hour = minute = second = 0;
+	}
+
+	Time(time_t timer) {
+		this->timer = timer;
+		tm *p = localtime(&timer);
+		year = p->tm_year + 1900;
+		month = p->tm_mon + 1;
+		day = p->tm_mday;
+		hour = p->tm_hour;
+		minute = p->tm_min;
+		second = p->tm_sec;
 	}
 	
 	/// structure time use string like "2016-07-27 21:00:00"
@@ -72,9 +84,11 @@ struct Time {
 
 	/// make the = operator with a format string
 	Time operator= (const char *time_format_string) {
-		if(strchr(time_format_string, '-')) {
+		if(strchr(time_format_string, '-')
+			&& atoi(time_format_string) != 0) {
 			timer = Time(time_format_string).timer;
 		} else {
+			year = month = day = 0;
 			hour = atoi(time_format_string);
 			minute = atoi(time_format_string + 3);
 			second = atoi(time_format_string + 6);
@@ -98,6 +112,11 @@ struct Time {
 	///make the - opeartor
 	long operator- (const Time &time) {
 		return timer - time.timer;
+	}
+
+	///make the - opeartor
+	Time operator+ (const long interval) {
+		
 	}
 
 	/// save as a string

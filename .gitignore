@@ -1,2 +1,4 @@
 /data/*.in
 /data/*.txt
+/algorithm/*.exe
+/algorithm/*.out

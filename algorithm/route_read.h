@@ -28,14 +28,12 @@ int file_read_stops(Graph *G)
 int file_read_stop_times(Graph *G)
 {
 	FILE *fp = fopen(STOP_TIMES_PATH, "r");
-	int from, to, trip_id, service_id, trip_count = 0;
-	char departure_time[30], arrival_time[30];
+	int from, to, start, cost, trip_id, service_id, trip_count = 0;
 	
 	if(fp == 0) return 0;
-	while(~fscanf(fp, "%d%d%s%s%d%d",
-		&from, &to, departure_time, arrival_time, &trip_id, &service_id)) {
-		int n = G->create_trip(from, to, departure_time,
-			arrival_time, trip_id, service_id);
+	while(~fscanf(fp, "%d%d%d%d%d%d",
+		&from, &to, &start, &cost, &trip_id, &service_id)) {
+		int n = G->create_trip(from, to, start, cost, trip_id, service_id);
 		G->add_trip(n);
 		trip_count += 1;
 	}
@@ -63,6 +61,7 @@ int read_files(Graph *G)
 	if(!file_read_stops(G)) return 0;
 	if(!file_read_stop_times(G)) return 0;
 	if(!file_read_transfers(G)) return 0;
+	printf("read ok...\n");
 
 	return 1;
 }

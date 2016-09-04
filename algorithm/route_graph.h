@@ -11,8 +11,7 @@
 
 // the trip
 struct Trip {
-	int from, to, trip_id, service_id, next;
-	Time departure_time, arrival_time;
+	int from, to, start, cost, trip_id, service_id, next;
 };
 
 // the Transfer
@@ -35,9 +34,9 @@ struct Graph {
 		this->max_transfer = max_transfer;
 
 		trip_head = (int *)malloc(sizeof(int) * max_vertex);
-		memset(trip_head, -1, sizeof(trip_head));
+		memset(trip_head, -1, sizeof(int) * max_vertex);
 		transfer_head = (int *)malloc(sizeof(int) * max_vertex);
-		memset(transfer_head, -1, sizeof(transfer_head));
+		memset(transfer_head, -1, sizeof(int) * max_vertex);
 
 		stop_name = (char **)malloc(sizeof(char *) * max_vertex);
 		trip = (Trip *)malloc(sizeof(Trip) * max_trip);
@@ -53,14 +52,12 @@ struct Graph {
 
 	/// create a trip, return the index in trip array
 	int create_trip(int from, int to, 
-		const char *departure_time, const char *arrival_time,
-		int trip_id = 0, int service_id = 0) {
+		int start, int cost, int trip_id = 0, int service_id = 0) {
 	
 		trip[trip_count].from = from;
 		trip[trip_count].to = to;
-		trip[trip_count].departure_time = departure_time;
-		trip[trip_count].arrival_time = arrival_time;
-		trip[trip_count].to = to;
+		trip[trip_count].start = start;
+		trip[trip_count].cost = cost;;
 		trip[trip_count].service_id = service_id;
 		trip[trip_count].trip_id = trip_id;
 

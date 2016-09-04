@@ -16,7 +16,7 @@
 struct Time {
 	time_t timer;
 	int year, month, day, hour, minute, second;
-	
+
 	/// default all 0
 	Time() {
 		year = month = day = hour = minute = second = 0;
@@ -32,7 +32,7 @@ struct Time {
 		minute = p->tm_min;
 		second = p->tm_sec;
 	}
-	
+
 	/// structure time use string like "2016-07-27 21:00:00"
 	Time(const char *time_format_string) {
 		year = atoi(time_format_string);
@@ -55,11 +55,19 @@ struct Time {
 		timer = mktime(&time);
 	}
 
+	/// reset time
+	Time reset(int day_sec) {
+		Time ti = Time(timer);
+		if(day_sec / 3600 < ti.hour) ti.day += 1;
+		ti.hour = day_sec / 3600; day_sec %= 3600;
+		ti.minute = day_sec / 60; day_sec %= 60;
+		ti.second = day_sec;
+		ti.update();
+		return ti;
+	}
+	
 	/// copy structure
 	Time(const Time &time) {
-		year = time.year;
-		month = time.month;
-		day = time.day;
 		hour = time.hour;
 		minute = time.minute;
 		second = time.second;
@@ -95,7 +103,7 @@ struct Time {
 		}
 	}
 
-
+	
 /***
 	/// useless because the copy structrue function
 	/// make the = operator with a Time object
@@ -110,13 +118,14 @@ struct Time {
 */
 
 	///make the - opeartor
-	long operator- (const Time &time) {
+	int operator- (const Time &time) {
 		return timer - time.timer;
 	}
 
 	///make the - opeartor
-	Time operator+ (const long interval) {
-		
+	Time operator+ (const int interval) {
+		int t = timer + interval;
+		return Time(timer);
 	}
 
 	/// save as a string

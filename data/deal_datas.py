@@ -46,15 +46,22 @@ lines = file_stop_times.readlines()
 for i in range(len(lines)) :
     lines[i] = lines[i].split(',')
 lines.sort(key=lambda x: [x[0], int(x[4])])
+
 def format_time(tms) :
     time = tms.split(':')
-    return str(int(time[0]) % 24) + ':' + time[1] + ':' + time[2]
+    return (int(time[0]) % 24) * 3600 + int(time[1]) * 60 + int(time[2])
+
+def time_interval(t1, t2):
+    t1 = t1.split(':')
+    t2 = t2.split(':')
+    return (int(t2[0]) - int(t1[0])) * 3600 + (int(t2[1]) - int(t1[1])) * 60 + (int(t2[2]) - int(t1[2]))
+
 for i in range(len(lines)) :
     if lines[i][0] not in hash_trip_id.keys():
         hash_trip_id[lines[i][0]] = str(len(hash_trip_id) + 1)
     if i == 0 or lines[i-1][0] != lines[i][0] :
     	continue
-    file_stop_times_out.write(dic_stop_id[lines[i-1][3]] + ' ' + dic_stop_id[lines[i][3]] + ' ' + format_time(lines[i-1][2]) + ' ' + format_time(lines[i][1]) + ' ' + hash_trip_id[lines[i-1][0]] + ' ' + dic_trip_id[lines[i-1][0]]  + '\n')
+    file_stop_times_out.write(dic_stop_id[lines[i-1][3]] + ' ' + dic_stop_id[lines[i][3]] + ' ' + str(format_time(lines[i-1][2])) + ' ' + str(time_interval(lines[i - 1][2], lines[i][1])) + ' ' + hash_trip_id[lines[i-1][0]] + ' ' + dic_trip_id[lines[i-1][0]]  + '\n')
 #	file_stop_times_out.write(dic_trip_id[line[0]] + ' ' + line[1] + ' ' + line[2] + ' ' + dic_stop_id[line[3]] + ' ' + line[0] + ' ' + line[4] + '\n')
 
 

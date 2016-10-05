@@ -23,6 +23,7 @@ int Dijkstra(Graph *G, int from, int to, const char *time)
     priority_queue<pti, vector<pti>, greater<pti> > pq;
     for(int i = 0; i < maxn; i++)
         dis[i].inf();
+    printf("%s\n", ctime(&dis[to].timer));
     memset(prev, -1, sizeof(prev));
     memset(used, 0, sizeof(used));
     pq.push(pti(time, from));
@@ -30,45 +31,70 @@ int Dijkstra(Graph *G, int from, int to, const char *time)
     while(!pq.empty()) {
         pti p = pq.top(); pq.pop();
         int u = p.second;
-        
-        used[u] = 1;
-        if(p.second == to) {
-        //    show(G, to);
+        if(p.second == to)
             break;
-        }
         if(dis[u] < p.first)
             continue;
-        //printf("%s\n", G->stop_name[u]);
         for(int i = G->trip_head[u]; i != -1; i = G->trip[i].next) {
             Trip &e = G->trip[i];
             Time ti = dis[u].reset(e.start);
-            //if(ti - dis[u] > 1200) continue;
             if(!used[e.to] && ti + e.cost < dis[e.to]) {
                 dis[e.to] = ti + e.cost;
                 prev[e.to] = u;
                 pq.push(pti(dis[e.to], e.to));
             }
         }
-/**
-        for(int i = G->trip_head[u]; i != -1; i = G->transfer[i].next) {
-            Transfer &e = G->transfer[i];
-            //if(
-        }
-*/
     }
     
-    //show(G, to, 0);
+    show(G, to);
     printf("%s\n", ctime(&dis[to].timer));
     
 }
 
+int SPFA(Graph *G, int from, int to, const char *time)
+{
+	queue<int> que;
+	for(int i = 0; i < maxn; i++)
+		dis[i].inf();
+	memset(prev, -1, sizeof(prev));
+	que.push(from);
+	dis[from] = time;
+	while(!que.empty()) {
+		int u = que.front(); que.pop();
+		for(int i = G->trip_head[u]; i != -1; i = G->trip[i].next) {
+			Trip &e = G->trip[i];
+			Time ti = dis[u].reset(e.start);
+			if(ti + e.cost < dis[e.to]) {
+				dis[e.to] = ti + e.cost;
+                prev[e.to] = u;
+				que.push(e.to);
+			}
+		}
+		for(int i = G->transfer_head[u]; i != -1; i = G->transfer[i].next) {
+			Transfer &e = G->transfer[i];
+			if(dis[u] + e.cost < dis[e.to]) {
+				dis[e.to] = dis[u] + e.cost;
+				prev[e.to] = u;
+				que.push(e.to);
+			}
+		}
+	}
+
+    show(G, to);
+    printf("%s\n", ctime(&dis[to].timer));
+	return 0;
+}
+
 int main()
 {
-    int c = clock();
     Graph *G = new Graph(5000, 200000, 10000);
     read_files(G);
-    Dijkstra(G, 1651, 472, "2016-07-08 8:00:00");
-    printf("%d\n", clock() - c);
+    int c = clock();
+    //Dijkstra(G, 1185, 472, "2016-07-08 08:00:00");
+    //SPFA(G, 1651, 472, "2016-07-08 08:00:00");
+    //SPFA(G, 890, 1651, "2016-07-08 08:00:00");
+    SPFA(G, 1427, 3150, "2016-07-08 08:00:00");
+    printf("%ld %ld\n", clock() - c, CLOCKS_PER_SEC);
 /**
     Time b = "2016-07-08 12:00:00";
     Time t = Time(b.timer).reset(124);

@@ -122,8 +122,8 @@ struct Time {
 
     ///make the - opeartor
     Time operator+ (const int interval) {
-        int t = timer + interval;
-        return Time(timer);
+        long t = timer + interval;
+        return Time(t);
     }
 
     /// save as a string

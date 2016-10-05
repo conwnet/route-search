@@ -1,3 +1,3 @@
 target:
 	@g++ main.cpp
-	@./a
+	@./a.out

@@ -2,3 +2,4 @@
 /data/*.txt
 /algorithm/*.exe
 /algorithm/*.out
+*.swp

@@ -27,11 +27,16 @@ struct Graph {
 	int *trip_head, *transfer_head;	/// Adj List's head
 	Trip *trip;
 	Transfer *transfer;
+	Time *arrival;
+	int *pre_vertex;
 
 	Graph(int max_vertex, int max_trip, int max_transfer) {
 		this->max_vertex = max_vertex;
 		this->max_trip = max_trip;
 		this->max_transfer = max_transfer;
+
+		arrival = (Time *)malloc(sizeof(Time) * max_vertex);
+		pre_vertex = (int *)malloc(sizeof(int) * max_vertex);
 
 		trip_head = (int *)malloc(sizeof(int) * max_vertex);
 		memset(trip_head, -1, sizeof(int) * max_vertex);
@@ -89,8 +94,4 @@ struct Graph {
 
 
 #endif
-
-
-
-
 

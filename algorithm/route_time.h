@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+char _route_time_h_str[32];
+
 struct Time {
     time_t timer;
     int year, month, day, hour, minute, second;
@@ -120,17 +122,17 @@ struct Time {
         return timer - time.timer;
     }
 
-    ///make the - opeartor
+    ///make the + opeartor
     Time operator+ (const int interval) {
         long t = timer + interval;
         return Time(t);
     }
 
     /// save as a string
-    char *tostr(char *str) {
-        sprintf(str, "%04d-%02d-%02d %02d:%02d:%02d",
+    char *tostr() {
+        sprintf(_route_time_h_str, "%04d-%02d-%02d %02d:%02d:%02d",
             year, month, day, hour, minute, second);
-        return str;
+        return _route_time_h_str;
     }
 };
 
@@ -138,10 +140,4 @@ struct Time {
 
 
 #endif
-
-
-
-
-
-
 

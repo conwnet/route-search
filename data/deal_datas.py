@@ -60,9 +60,9 @@ for i in range(len(lines)) :
     if lines[i][0] not in hash_trip_id.keys():
         hash_trip_id[lines[i][0]] = str(len(hash_trip_id) + 1)
     if i == 0 or lines[i-1][0] != lines[i][0] :
-    	continue
+        continue
     file_stop_times_out.write(dic_stop_id[lines[i-1][3]] + ' ' + dic_stop_id[lines[i][3]] + ' ' + str(format_time(lines[i-1][2])) + ' ' + str(time_interval(lines[i - 1][2], lines[i][1])) + ' ' + hash_trip_id[lines[i-1][0]] + ' ' + dic_trip_id[lines[i-1][0]]  + '\n')
-#	file_stop_times_out.write(dic_trip_id[line[0]] + ' ' + line[1] + ' ' + line[2] + ' ' + dic_stop_id[line[3]] + ' ' + line[0] + ' ' + line[4] + '\n')
+#    file_stop_times_out.write(dic_trip_id[line[0]] + ' ' + line[1] + ' ' + line[2] + ' ' + dic_stop_id[line[3]] + ' ' + line[0] + ' ' + line[4] + '\n')
 
 
 #read from calendar.txt and output

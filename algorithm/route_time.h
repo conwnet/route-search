@@ -46,6 +46,7 @@ struct Time {
         update();
     }
 
+    // get timer
     void update() {
         tm time;
         time.tm_year = year - 1900;
@@ -54,11 +55,12 @@ struct Time {
         time.tm_hour = hour;
         time.tm_min = minute;
         time.tm_sec = second;
+        time.tm_isdst = 0;
         timer = mktime(&time);
     }
 
     /// reset time
-    Time reset(int day_sec) {
+    Time reset(long day_sec) {
         time_t dt = hour * 3600 + minute * 60 + second;
         time_t ret = timer - dt + day_sec;
         if(day_sec < dt)
@@ -118,12 +120,12 @@ struct Time {
     }
 
     ///make the - opeartor
-    int operator- (const Time &time) {
+    long operator- (const Time &time) {
         return timer - time.timer;
     }
 
     ///make the + opeartor
-    Time operator+ (const int interval) {
+    Time operator+ (const long interval) {
         long t = timer + interval;
         return Time(t);
     }

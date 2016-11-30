@@ -91,6 +91,14 @@ struct Time {
     bool operator< (const Time &time) const {
         return timer < time.timer;
     }
+    
+    bool operator> (const Time &time) const {
+        return time.timer < timer;
+    }
+
+    bool operator== (const Time &time) const {
+        return !(*this < time || *this > time);
+    }
 
 /**
     /// make the = operator with a format string

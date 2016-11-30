@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     read_files(G);
     int readed = clock();
 
-    SPFA(G, from, to, time);
+    SPFA(G, from, to, time, 864000, 7);
     //spfa(G, from, to);
     int searched = clock();
 

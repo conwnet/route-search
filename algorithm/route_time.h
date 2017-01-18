@@ -70,6 +70,9 @@ struct Time {
     
     /// copy structure
     Time(const Time &time) {
+        year = time.year;
+        month = time.month;
+        day = time.day;
         hour = time.hour;
         minute = time.minute;
         second = time.second;

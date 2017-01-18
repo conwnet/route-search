@@ -17,7 +17,7 @@ int file_read_stops(Graph *G)
 
     if(fp == 0) return 0;
     while(~fscanf(fp, "%d", &stop_id)) {
-        fscanf(fp, "%s", G->stop_name[stop_id]);
+        fscanf(fp, "%d%s", &G->stop_type[stop_id], G->stop_name[stop_id]);
         fscanf(fp, "%lf%lf", &x, &y);
         stop_count += 1;
     }

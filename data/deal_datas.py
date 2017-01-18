@@ -24,7 +24,14 @@ stop_count = 1
 for line in lines :
     line = line.split(',')
     dic_stop_id[line[0]] = str(stop_count)
-    file_stop_out.write(str(stop_count) + ' ' + line[2] + ' ' + line[4] + ' ' + line[5] + '\n')
+    if line[0].startswith('AB'):
+        file_stop_out.write(dic_stop_id[line[0]] + ' 0 ' + line[2] + ' ' + line[4] + ' ' + line[5] + '\n')
+    elif line[0].startswith('TR'):
+        file_stop_out.write(dic_stop_id[line[0]] + ' 1 ' + line[2] + ' ' + line[4] + ' ' + line[5] + '\n')
+    elif line[0].startswith('PL'):
+        file_stop_out.write(dic_stop_id[line[0]] + ' 2 ' + line[2] + ' ' + line[4] + ' ' + line[5] + '\n')
+    else:
+        file_stop_out.write(dic_stop_id[line[0]] + ' 3 ' + line[2] + ' ' + line[4] + ' ' + line[5] + '\n')
     stop_count += 1
 
 #read from trips.txt to get the service_id  (trip_id => service_id)
@@ -76,3 +83,4 @@ lines = file_transfers.readlines()
 for line in lines :
     line = line.split(',')
     file_transfers_out.write(dic_stop_id[line[0]] + ' ' + dic_stop_id[line[1]] + ' ' + line[3] + '\n')
+

@@ -15,12 +15,12 @@ Route *route;
 
 void show_path(Graph *G, int to)
 {
-    printf("%s %s %d\n", G->stop_name[to], route[to].time.tostr(),
-            route[to].trip_id);
     if(route[to].prev != -1) show_path(G, route[to].prev);
+    printf("%s %s %d %d\n", G->stop_name[to], route[to].time.tostr(),
+            route[to].trip_id, G->stop_type[to]);
 }
 
-int SPFA(Graph *G, int from, int to, const char *time, int time_limit, int deep_limit)
+int SPFA(Graph *G, int from, int to, const char *time, int time_limit, int deep_limit, int type)
 {
     queue<int> que;
     //Time *dis = G->arrival;
@@ -35,6 +35,7 @@ int SPFA(Graph *G, int from, int to, const char *time, int time_limit, int deep_
         route[i].prev = -1;
         //dis[i].inf();
     }
+    
     //memset(prev, -1, sizeof(int) * maxv);
     memset(inq, 0, sizeof(int) * maxv);
 
@@ -53,10 +54,12 @@ int SPFA(Graph *G, int from, int to, const char *time, int time_limit, int deep_
             continue;
         for(int i = G->trip_head[u]; i != -1; i = G->trip[i].next) {
             Trip &e = G->trip[i];
+            if(!((1 << G->stop_type[e.to]) & type))
+                continue;
             //Time ti = dis[u].reset(e.start);
             Time ti = route[u].time.reset(e.start);
-            if(ti + e.cost < route[e.to].time ||
-                (ti + e.cost == route[u].time && e.trip_id == route[u].trip_id)) {
+            if(ti + e.cost < route[e.to].time) {
+               //|| (ti + e.cost == route[u].time && e.trip_id == route[u].trip_id)) {
                 if(e.trip_id != route[u].trip_id)
                     route[e.to].deep = route[u].deep + 1;
                 else
@@ -87,10 +90,8 @@ int SPFA(Graph *G, int from, int to, const char *time, int time_limit, int deep_
         }
     }
 
-    return 0;
+    return route[to].time - time;
 }
-
-
 
 /**
 int spfa(Graph *G, int from, int to)
@@ -147,7 +148,6 @@ int spfa(Graph *G, int from, int to)
     return 0;
 }
 */
-
 /**
 int used[8000];
 int Dijkstra(Graph *G, int from, int to, const char *time)
@@ -184,5 +184,87 @@ int Dijkstra(Graph *G, int from, int to, const char *time)
 }
 */
 
+struct Edge {
+    Time current;
+    int cost, to;
+
+    Edge(Time current, int cost, int to):
+        current(current), cost(cost), to(to) {}
+
+    bool operator < (const Edge &e) const {
+        return cost > e.cost;
+    }
+};
+
+int dis[5050], prev[5050];
+
+int show_path_dij(Graph *G, int to)
+{
+    if(prev[to] != -1) show_path_dij(G, prev[to]);
+    printf("%s %d\n", G->stop_name[to], dis[to]);
+}
+
+void Dijkstra(Graph *G, int from, int to, Time time)
+{
+    priority_queue<Edge> pq;
+    memset(dis, 0x3f, sizeof(int) * G->max_vertex);
+    
+    prev[from] = -1; dis[from] = 0;
+    for(int i = G->trip_head[from]; i != -1; i = G->trip[i].next) {
+        Trip &e = G->trip[i];
+        pq.push(Edge(time.reset(e.start) + e.cost, e.cost, e.to));
+        dis[e.to] = e.cost;
+        prev[e.to] = from;
+    }
+    while(!pq.empty()) {
+        Edge e = pq.top(); pq.pop();
+        int u = e.to;
+        if(dis[u] < e.cost) continue;
+        for(int i = G->trip_head[u]; i != -1; i = G->trip[i].next) {
+            Trip &t = G->trip[i];
+            int cost = (e.current.reset(t.start) - e.current) + t.cost + e.cost;
+            if(cost < dis[t.to]) {
+                dis[t.to] = cost;
+                pq.push(Edge(e.current.reset(t.start) + e.cost, dis[t.to], t.to));
+                prev[t.to] = u;
+            }
+        }
+        for(int i = G->transfer_head[u]; i != -1; i = G->transfer[i].next) {
+            Transfer &t = G->transfer[i];
+            int cost = e.cost + t.cost;
+            if(cost < dis[t.to]) {
+                dis[t.to] = cost;
+                pq.push(Edge(e.current + t.cost, dis[t.to], t.to));
+                prev[t.to] = u;
+            }
+        }
+    }
+
+    show_path_dij(G, to);
+    printf("耗时：%d s\n", dis[to]);
+
+}
+
+
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

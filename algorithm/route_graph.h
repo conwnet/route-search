@@ -25,12 +25,11 @@ struct Transfer {
     int from, to, cost, next;
 };
 
-
 /// the graph used Adj List
 struct Graph {
     int max_vertex, max_trip, max_transfer, stop_count, trip_count, transfer_count;
     char **stop_name;    /// save the Chinese stop name index by stop_id
-    int *trip_head, *transfer_head;    /// Adj List's head
+    int *trip_head, *transfer_head, *stop_type;    /// Adj List's head
     Trip *trip;
     Transfer *transfer;
 
@@ -45,6 +44,7 @@ struct Graph {
         memset(transfer_head, -1, sizeof(int) * max_vertex);
 
         stop_name = (char **)malloc(sizeof(char *) * max_vertex);
+        stop_type = (int *)malloc(sizeof(int) * max_vertex);
         trip = (Trip *)malloc(sizeof(Trip) * max_trip);
         transfer = (Transfer *)malloc(sizeof(Transfer) * max_transfer);
 

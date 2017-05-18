@@ -12,7 +12,7 @@
 // the answer
 struct Route {
     Time time;
-    int deep, prev, trip_id;
+    int deep, pre_v, trip_id;
 };
 
 // the trip

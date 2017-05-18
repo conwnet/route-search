@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
 
     read_files(G);
 
-    int n = SPFA(G, from, to, time, 186400, 7, 7);
-    show_path(G, to);
+    // int n = SPFA(G, from, to, time, 186400, 7, 7);
+    // show_path(G, to);
 
-    printf("耗时： %d s\n", n);
+    // printf("耗时： %d s\n", n);
     printf("\n\n ---------------------- \n\n");
 
     int started = clock();
